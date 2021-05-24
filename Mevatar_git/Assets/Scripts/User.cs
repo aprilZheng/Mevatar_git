@@ -21,13 +21,13 @@ public class User : MonoBehaviour
         Debug.Log("User Class Created User");
     }
 
-    public void UpdateUsername(string _username)
+    public void SetUsername(string _username)
     {
         username = _username;
         Debug.Log("User Class Updated Username");
     }
 
-    public void UpdateEmail(string _email)
+    public void SetEmail(string _email)
     {
         email = _email;
         Debug.Log("User Class Updated email");

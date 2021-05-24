@@ -41,6 +41,8 @@ public class FirebaseManager : MonoBehaviour
     public TMP_Text displayEyebrow;
     public TMP_Text displayEyes;
 
+    public TMP_InputField testEyebrowField;
+
     // User object
     [Header("User Object")]
     public GameObject currentUserObject;
@@ -400,7 +402,6 @@ public class FirebaseManager : MonoBehaviour
             Debug.Log("data been retrieved");
             //Data has been retrieved
             DataSnapshot snapshot = DBTask.Result;
-            //DataSnapshot snapshot2 = DBTask2.Result;
             displayName.text = snapshot.Child("username").Value.ToString();
             usernameField.text = snapshot.Child("username").Value.ToString();
             displayEmail.text = snapshot.Child("email").Value.ToString();
@@ -408,20 +409,19 @@ public class FirebaseManager : MonoBehaviour
             displayHead.text = snapshot.Child("mevatar").Child("head").Value.ToString();
             displayEyebrow.text = snapshot.Child("mevatar").Child("eyebrow").Value.ToString();
             displayEyes.text = snapshot.Child("mevatar").Child("eyes").Value.ToString();
-            //hairField.text = snapshot.Child("hair").Value.ToString();
 
-            //InitCurrentUser();
+            InitCurrentUser();
         }
     }
 
     public void InitCurrentUser()
     {
-        currentUser = currentUserObject.AddComponent<User>();
+        currentUser = currentUserObject.GetComponent<User>();
 
-        currentUser.UpdateEmail(displayEmail.text);
-        currentUser.UpdateUsername(usernameField.text);
+        currentUser.SetEmail(displayEmail.text);
+        currentUser.SetUsername(usernameField.text);
 
-        currentMevatar = currentUserObject.AddComponent<Mevatar>();
+        currentMevatar = currentUserObject.GetComponent<Mevatar>();
 
         currentMevatar.SetHead(displayHead.text);
         currentMevatar.SetEyebrow(displayEyebrow.text);
@@ -465,5 +465,11 @@ public class FirebaseManager : MonoBehaviour
         displayHead.text = "";
         displayEyebrow.text = "";
         displayEyes.text = "";
+    }
+
+    public void TestEyebrowButton()
+    {
+        StartCoroutine(UpdateEyebrow(testEyebrowField.text));
+        StartCoroutine(LoadUserData());
     }
 }
