@@ -31,6 +31,15 @@ public class FirebaseManager : MonoBehaviour
     public TMP_Text warningRegisterText;
     public TMP_Text confirmRegisterText;
 
+    // User data
+    [Header("User Data")]
+    public TMP_Text displayName;
+    public TMP_Text displayEmail;
+    public TMP_InputField usernameField;
+    public TMP_Text displayHead;
+    public TMP_Text displayEyebrow;
+    public TMP_Text displayEyes;
+
     void Awake()
     {
         // check all of the necessary dependencies for Firebase are present on the system
@@ -40,12 +49,39 @@ public class FirebaseManager : MonoBehaviour
             if (dependencyStatus == DependencyStatus.Available)
             {
                 // if they are avalible, Initialized Firebase
-                //InitializeFirebase();
+                InitializeFirebase();
             }
             else
             {
                 Debug.LogError("Could not resolve all Firebase dependencies: " + dependencyStatus);
             }
         });
+    }
+
+    void InitializeFirebase()
+    {
+        auth = Firebase.Auth.FirebaseAuth.DefaultInstance;
+        auth.StateChanged += AuthStateChanged;
+        AuthStateChanged(this, null);
+    }
+
+    void AuthStateChanged(object sender, System.EventArgs eventArgs)
+    {
+        if (auth.CurrentUser != User)
+        {
+            bool signedIn = User != auth.CurrentUser && auth.CurrentUser != null;
+            if (!signedIn && User != null)
+            {
+                Debug.Log("Signed out " + User.UserId);
+            }
+            User = auth.CurrentUser;
+            if (signedIn)
+            {
+                Debug.Log("Signed in " + User.UserId);
+                displayName.text = User.DisplayName ?? "";
+                displayEmail.text = User.Email ?? "";
+                //photoUrl = User.PhotoUrl ?? "";
+            }
+        }
     }
 }
