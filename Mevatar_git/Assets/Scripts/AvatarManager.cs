@@ -168,6 +168,7 @@ public class AvatarManager : MonoBehaviour
 
     public void InitAvatar()
     {
+        LoadMevatarFromUser();
 
         int length = AvatarInfo.GetLength(0);
         for (int i = 0; i < length; i++)

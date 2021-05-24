@@ -475,5 +475,6 @@ public class FirebaseManager : MonoBehaviour
     {
         StartCoroutine(UpdateEyebrow(testEyebrowField.text));
         StartCoroutine(LoadUserData());
+        AvatarManager.instance.LoadInitAvatar("eyebrow", testEyebrowField.text);
     }
 }
