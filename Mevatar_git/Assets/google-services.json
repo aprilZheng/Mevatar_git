@@ -1,6 +1,7 @@
 {
   "project_info": {
     "project_number": "840698076929",
+    "firebase_url": "https://newmevatar-default-rtdb.europe-west1.firebasedatabase.app",
     "project_id": "newmevatar",
     "storage_bucket": "newmevatar.appspot.com"
   },
