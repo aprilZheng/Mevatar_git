@@ -125,8 +125,7 @@ public class FirebaseManager : MonoBehaviour
             warningLoginText.text = "";
             confirmLoginText.text = "Logged in";
 
-            // wait 2 second, go to the show UI
-            yield return new WaitForSeconds(2);
+            
 
             displayEmail.text = User.Email;
             usernameField.text = User.DisplayName;
@@ -137,10 +136,15 @@ public class FirebaseManager : MonoBehaviour
 
             StartCoroutine(LoadUserData());
 
+            // wait 2 second, go to the show UI
+            yield return new WaitForSeconds(2);
+
             UIManager.instance.MevatarShowScreen();
             confirmLoginText.text = "";// clear the text
             ClearLoginFields();
             ClearRegisterFields();
+
+            AvatarManager.instance.InitAvatar();
 
             
         }
