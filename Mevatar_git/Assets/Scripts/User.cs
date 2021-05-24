@@ -4,15 +4,7 @@ using UnityEngine;
 
 public class User : MonoBehaviour
 {
-    // Start is called before the first frame update
-    void Start()
-    {
-        
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-        
-    }
+    public string email;
+    public string username;
+    public Mevatar mevatar;
 }
