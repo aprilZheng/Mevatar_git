@@ -41,6 +41,12 @@ public class FirebaseManager : MonoBehaviour
     public TMP_Text displayEyebrow;
     public TMP_Text displayEyes;
 
+    // User object
+    [Header("User Object")]
+    public GameObject currentUserObject;
+    public User currentUser;
+    public Mevatar currentMevatar;
+
     void Awake()
     {
         // check all of the necessary dependencies for Firebase are present on the system
@@ -125,12 +131,16 @@ public class FirebaseManager : MonoBehaviour
 
             displayName.text = User.DisplayName;
 
+            
+
             StartCoroutine(LoadUserData());
 
             UIManager.instance.MevatarShowScreen();
             confirmLoginText.text = "";// clear the text
             ClearLoginFields();
             ClearRegisterFields();
+
+            
         }
     }
     public void ClearLoginFields()
@@ -391,7 +401,7 @@ public class FirebaseManager : MonoBehaviour
             //Data has been retrieved
             DataSnapshot snapshot = DBTask.Result;
             //DataSnapshot snapshot2 = DBTask2.Result;
-
+            displayName.text = snapshot.Child("username").Value.ToString();
             usernameField.text = snapshot.Child("username").Value.ToString();
             displayEmail.text = snapshot.Child("email").Value.ToString();
 
@@ -399,6 +409,61 @@ public class FirebaseManager : MonoBehaviour
             displayEyebrow.text = snapshot.Child("mevatar").Child("eyebrow").Value.ToString();
             displayEyes.text = snapshot.Child("mevatar").Child("eyes").Value.ToString();
             //hairField.text = snapshot.Child("hair").Value.ToString();
+
+            //InitCurrentUser();
         }
+    }
+
+    public void InitCurrentUser()
+    {
+        currentUser = currentUserObject.AddComponent<User>();
+
+        currentUser.UpdateEmail(displayEmail.text);
+        currentUser.UpdateUsername(usernameField.text);
+
+        currentMevatar = currentUserObject.AddComponent<Mevatar>();
+
+        currentMevatar.SetHead(displayHead.text);
+        currentMevatar.SetEyebrow(displayEyebrow.text);
+        currentMevatar.SetEyes(displayEyes.text);
+
+        currentUser.mevatar = currentMevatar;
+        //currentUser.mevatar.SetHead(displayHead.text);
+        //currentUser.mevatar.SetEyebrow(displayEyebrow.text);
+        //currentUser.mevatar.SetEyes(displayEyes.text);
+    }
+
+    public void SaveNameButton()
+    {
+        StartCoroutine(UpdateUsernameAuth(usernameField.text));
+        StartCoroutine(UpdateUsernameDatabase(usernameField.text));
+        //usernameText.text = usernameField.text;// update the display username on show UI
+        StartCoroutine(LoadUserData());
+    }
+
+    public void CloseUserDataButton()
+    {
+        usernameField.text = displayName.text;
+        UIManager.instance.UserDataUI.SetActive(false);
+    }
+
+    public void SignOutButton()
+    {
+        auth.SignOut();
+        UIManager.instance.LoginScreen();
+        ClearLoginFields();
+        ClearRegisterFields();
+        //AvatarManager._instance.SignOutReInitAvatar();//reset avatar's tranform
+        ClearDataDisplay();
+    }
+
+    public void ClearDataDisplay()
+    {
+        displayName.text = "";
+        displayEmail.text = "";
+        usernameField.text = "";
+        displayHead.text = "";
+        displayEyebrow.text = "";
+        displayEyes.text = "";
     }
 }
