@@ -125,7 +125,7 @@ public class FirebaseManager : MonoBehaviour
 
             displayName.text = User.DisplayName;
 
-            //StartCoroutine(LoadUserData());
+            StartCoroutine(LoadUserData());
 
             UIManager.instance.MevatarShowScreen();
             confirmLoginText.text = "";// clear the text
@@ -234,7 +234,7 @@ public class FirebaseManager : MonoBehaviour
                         UIManager.instance.LoginScreen();
 
                         // for initialize user database, using default value
-                        //InitDataButton();
+                        InitData();
 
                         ClearRegisterFields();
                         ClearLoginFields();
@@ -244,5 +244,161 @@ public class FirebaseManager : MonoBehaviour
         }
     }
 
+    public void InitData()
+    {
+        StartCoroutine(UpdateUsernameAuth(usernameRegisterField.text));
+        StartCoroutine(UpdateUsernameDatabase(usernameRegisterField.text));
+        StartCoroutine(UpdateEmail(emailRegisterField.text));
+        StartCoroutine(UpdateHead("1"));
+        StartCoroutine(UpdateEyebrow("1"));
+        StartCoroutine(UpdateEyes("1"));
+    }
 
+    private IEnumerator UpdateUsernameAuth(string _username)
+    {
+        // create a user profile and set the username
+        UserProfile profile = new UserProfile { DisplayName = _username };
+
+        // call the Firebase auth update user profile function passing the profile with the username
+        var ProfileTask = User.UpdateUserProfileAsync(profile);
+        //  wait until the task completes
+        yield return new WaitUntil(predicate: () => ProfileTask.IsCompleted);
+
+        if (ProfileTask.Exception != null)
+        {
+            Debug.LogWarning(message: $"Failed to create user profile task with {ProfileTask.Exception}");
+        }
+        else
+        {
+            // auth username is now updated
+        }
+    }
+
+    private IEnumerator UpdateUsernameDatabase(string _username)
+    {
+        //Set the currently logged in user username in the database
+        var DBTask = DBreference.Child("users").Child(User.UserId).Child("username").SetValueAsync(_username);
+
+        yield return new WaitUntil(predicate: () => DBTask.IsCompleted);
+
+        if (DBTask.Exception != null)
+        {
+            Debug.LogWarning(message: $"Failed to update username task with {DBTask.Exception}");
+        }
+        else
+        {
+            //Database username is now updated
+        }
+    }
+
+    public IEnumerator UpdateEmail(string _email)
+    {
+        // set the currently logged in user's avatar head model
+        var DBTask = DBreference.Child("users").Child(User.UserId).Child("email").SetValueAsync(_email);
+
+        yield return new WaitUntil(predicate: () => DBTask.IsCompleted);
+
+        if (DBTask.Exception != null)
+        {
+            Debug.LogWarning(message: $"Failed to update email with {DBTask.Exception}");
+        }
+        else
+        {
+            //email is now updated
+        }
+    }
+
+    public IEnumerator UpdateHead(string _head)
+    {
+        // set the currently logged in user's avatar head model
+        var DBTask = DBreference.Child("users").Child(User.UserId).Child("mevatar").Child("head").SetValueAsync(_head);
+
+        yield return new WaitUntil(predicate: () => DBTask.IsCompleted);
+
+        if (DBTask.Exception != null)
+        {
+            Debug.LogWarning(message: $"Failed to register task with {DBTask.Exception}");
+        }
+        else
+        {
+            //head model is now updated
+        }
+    }
+    public IEnumerator UpdateEyebrow(string _eyebrow)
+    {
+        // set the currently logged in user's avatar head model
+        var DBTask = DBreference.Child("users").Child(User.UserId).Child("mevatar").Child("eyebrow").SetValueAsync(_eyebrow);
+
+        yield return new WaitUntil(predicate: () => DBTask.IsCompleted);
+
+        if (DBTask.Exception != null)
+        {
+            Debug.LogWarning(message: $"Failed to register task with {DBTask.Exception}");
+        }
+        else
+        {
+            //eyebrow model is now updated
+            Debug.Log("update eyebrow chenggong");
+        }
+    }
+
+    public IEnumerator UpdateEyes(string _eyes)
+    {
+        // set the currently logged in user's avatar head model
+        var DBTask = DBreference.Child("users").Child(User.UserId).Child("mevatar").Child("eyes").SetValueAsync(_eyes);
+
+        yield return new WaitUntil(predicate: () => DBTask.IsCompleted);
+
+        if (DBTask.Exception != null)
+        {
+            Debug.LogWarning(message: $"Failed to register task with {DBTask.Exception}");
+        }
+        else
+        {
+            //eyes model is now updated
+            Debug.Log("update eyes chenggong");
+        }
+    }
+
+    public IEnumerator LoadUserData()
+    {
+        //Get the currently logged in user data
+        var DBTask = DBreference.Child("users").Child(User.UserId).GetValueAsync();
+        //var DBTask2= DBreference.Child("users").Child(User.UserId).Child("mevatar").GetValueAsync();
+
+        yield return new WaitUntil(predicate: () => DBTask.IsCompleted);
+
+        if (DBTask.Exception != null)
+        {
+            Debug.LogWarning(message: $"Failed to register task with {DBTask.Exception}");
+        }
+        else if (DBTask.Result.Value == null)
+        {
+            //No data exists yet
+            displayHead.text = "1";
+            displayEyebrow.text = "1";
+            displayEyes.text = "1";
+            //hairField.text = "1";
+            UpdateEyebrow("1");
+            //UpdateHair("1");
+            UpdateHead("1");
+            UpdateEyes("1");
+            Debug.Log("No data exit");
+        }
+        else
+        {
+            Debug.Log("data been retrieved");
+            //Data has been retrieved
+            DataSnapshot snapshot = DBTask.Result;
+            //DataSnapshot snapshot2 = DBTask2.Result;
+
+            usernameField.text = snapshot.Child("username").Value.ToString();
+            displayEmail.text = snapshot.Child("email").Value.ToString();
+
+            displayHead.text = snapshot.Child("mevatar").Child("head").Value.ToString();
+            displayEyebrow.text = snapshot.Child("mevatar").Child("eyebrow").Value.ToString();
+            displayEyes.text = snapshot.Child("mevatar").Child("eyes").Value.ToString();
+            //hairField.text = snapshot.Child("hair").Value.ToString();
+        }
+    }
 }
