@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "840698076929",
+    "project_id": "newmevatar",
+    "storage_bucket": "newmevatar.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:840698076929:android:2bf345902dff5db2ffc500",
+        "android_client_info": {
+          "package_name": "com.TonglinZheng.Mevatar_git"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "840698076929-1d4nltrb2657h7le8smhkeqtr8qcqucn.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAp6Q2EfAsuhEgFgn_eaeIwheRetEK1qgs"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "840698076929-1d4nltrb2657h7le8smhkeqtr8qcqucn.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
