@@ -67,5 +67,6 @@ public class UIManager : MonoBehaviour
     public void UserDataScreen()
     {
         UserDataUI.SetActive(true);
+        FirebaseManager._instance.StartCoroutine(FirebaseManager._instance.LoadUserData());
     }
 }
