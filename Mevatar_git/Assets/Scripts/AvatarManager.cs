@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class AvatarManager : MonoBehaviour
 {
-    public static AvatarManager instance;
+    public static AvatarManager _instance;
 
     private GameObject source;
     private Transform sourceTrans;
@@ -26,7 +26,7 @@ public class AvatarManager : MonoBehaviour
 
     void Awake()
     {
-        instance = this;
+        _instance = this;
     }
 
     void Start()
@@ -187,8 +187,6 @@ public class AvatarManager : MonoBehaviour
             LoadInitAvatar("eyeInR", num);
         }
         Debug.Log("Load init avatar called");
-
-        //SaveAvatarInfo(part, num);
     }
 
     public void ChangeAvatar(string part, string num)
@@ -201,23 +199,7 @@ public class AvatarManager : MonoBehaviour
             ChangeAvatar("eyeInR", num);
         }
         Debug.Log("change avatar called");
-
-        //SaveAvatarInfo(part, num);
-
     }
-
-    //void SaveAvatarInfo(string part, string num)
-    //{
-    //    int length = AvatarInfo.GetLength(0);
-    //    for (int i = 0; i < length; i++)
-    //    {
-    //        if (AvatarInfo[i, 0] == part)
-    //        {
-    //            AvatarInfo[i, 1] = num;
-    //        }
-    //    }
-
-    //}
 
     public void DefaultRotationAvatar()
     {
@@ -230,6 +212,5 @@ public class AvatarManager : MonoBehaviour
             part.transform.localScale = transforms[names[0]].localScale;
             part.transform.rotation = transforms[names[0]].rotation;
         }
-
     }
 }

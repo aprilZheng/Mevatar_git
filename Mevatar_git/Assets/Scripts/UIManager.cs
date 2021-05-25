@@ -53,12 +53,14 @@ public class UIManager : MonoBehaviour
     public void MevatarShowScreen()
     {
         ClearScreen();
+        AvatarManager._instance.DefaultRotationAvatar();
         MevatarShowUI.SetActive(true);
     }
 
     public void MevatarChangeScreen()
     {
         ClearScreen();
+        AvatarManager._instance.DefaultRotationAvatar();
         MevatarChangeUI.SetActive(true);
     }
 

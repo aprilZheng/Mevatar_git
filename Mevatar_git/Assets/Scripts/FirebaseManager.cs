@@ -9,7 +9,7 @@ using System.Linq;
 
 public class FirebaseManager : MonoBehaviour
 {
-    public static FirebaseManager instance;
+    public static FirebaseManager _instance;
 
     // Firebase variables
     [Header("Firebase")]
@@ -53,6 +53,8 @@ public class FirebaseManager : MonoBehaviour
 
     void Awake()
     {
+        _instance = this;
+
         // check all of the necessary dependencies for Firebase are present on the system
         FirebaseApp.CheckAndFixDependenciesAsync().ContinueWith(task =>
         {
@@ -146,7 +148,7 @@ public class FirebaseManager : MonoBehaviour
             ClearLoginFields();
             ClearRegisterFields();
 
-            AvatarManager.instance.InitAvatar();
+            AvatarManager._instance.InitAvatar();
 
             
         }
@@ -434,16 +436,12 @@ public class FirebaseManager : MonoBehaviour
         currentMevatar.SetEyes(displayEyes.text);
 
         currentUser.mevatar = currentMevatar;
-        //currentUser.mevatar.SetHead(displayHead.text);
-        //currentUser.mevatar.SetEyebrow(displayEyebrow.text);
-        //currentUser.mevatar.SetEyes(displayEyes.text);
     }
 
     public void SaveNameButton()
     {
         StartCoroutine(UpdateUsernameAuth(usernameField.text));
         StartCoroutine(UpdateUsernameDatabase(usernameField.text));
-        //usernameText.text = usernameField.text;// update the display username on show UI
         StartCoroutine(LoadUserData());
     }
 
@@ -459,8 +457,8 @@ public class FirebaseManager : MonoBehaviour
         UIManager.instance.LoginScreen();
         ClearLoginFields();
         ClearRegisterFields();
-        //AvatarManager._instance.SignOutReInitAvatar();//reset avatar's tranform
         ClearDataDisplay();
+        AvatarManager._instance.DefaultRotationAvatar();
     }
 
     public void ClearDataDisplay()
@@ -477,6 +475,50 @@ public class FirebaseManager : MonoBehaviour
     {
         StartCoroutine(UpdateEyebrow(testEyebrowField.text));
         StartCoroutine(LoadUserData());
-        AvatarManager.instance.LoadInitAvatar("eyebrow", testEyebrowField.text);
+        AvatarManager._instance.LoadInitAvatar("eyebrow", testEyebrowField.text);
+    }
+
+    public void ChangeHead(string _head)
+    {
+        StartCoroutine(UpdateHead(_head));
+        StartCoroutine(LoadUserData());
+        //AvatarManager.instance.LoadInitAvatar("head", _head);
+    }
+    public void ChangeEyebrow(string _eyebrow)
+    {
+        StartCoroutine(UpdateHead(_eyebrow));
+        StartCoroutine(LoadUserData());
+        //AvatarManager.instance.LoadInitAvatar("eyebrow", _eyebrow);
+    }
+    public void ChangeEyes(string _eyes)
+    {
+        StartCoroutine(UpdateHead(_eyes));
+        StartCoroutine(LoadUserData());
+        //AvatarManager.instance.LoadInitAvatar("eyes", _eyes);
+    }
+
+    public void ChangeMevatar(string part, string num)
+    {
+        switch (part)
+        {
+            case "head":
+                Debug.Log("names[1]= " + num);
+                ChangeHead(num);
+                //AvatarManager.instance.LoadInitAvatar("head", names[1]);
+                break;
+            case "eyebrow":
+                Debug.Log("names[1]= " + num);
+                ChangeEyebrow(num);
+                //AvatarManager.instance.LoadInitAvatar("eyebrow", names[1]);
+                break;
+            case "eyeInL":
+                Debug.Log("names[1]= " + num);
+                ChangeEyes(num);
+                //AvatarManager.instance.LoadInitAvatar("eyes", names[1]);
+                break;
+            default:
+                Debug.Log("AvatarChangeButton Save data failed. names[0]= " + part + ", names[1]= " + num);
+                break;
+        }
     }
 }
