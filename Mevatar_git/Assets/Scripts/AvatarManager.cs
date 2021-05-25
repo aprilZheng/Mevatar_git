@@ -191,6 +191,21 @@ public class AvatarManager : MonoBehaviour
         //SaveAvatarInfo(part, num);
     }
 
+    public void ChangeAvatar(string part, string num)
+    {
+
+        MeshFilter mf = data[part][num];
+        meshFilter[part].mesh = mf.mesh;
+        if (part == "eyeInL")
+        {
+            ChangeAvatar("eyeInR", num);
+        }
+        Debug.Log("change avatar called");
+
+        //SaveAvatarInfo(part, num);
+
+    }
+
     //void SaveAvatarInfo(string part, string num)
     //{
     //    int length = AvatarInfo.GetLength(0);
@@ -203,4 +218,18 @@ public class AvatarManager : MonoBehaviour
     //    }
 
     //}
+
+    public void DefaultRotationAvatar()
+    {
+        MeshFilter[] parts = target.GetComponentsInChildren<MeshFilter>();
+        foreach (MeshFilter part in parts)
+        {
+            string[] names = part.name.Split('-');
+
+            part.transform.position = transforms[names[0]].position;
+            part.transform.localScale = transforms[names[0]].localScale;
+            part.transform.rotation = transforms[names[0]].rotation;
+        }
+
+    }
 }

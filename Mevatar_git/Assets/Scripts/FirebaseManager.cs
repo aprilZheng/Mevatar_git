@@ -9,6 +9,8 @@ using System.Linq;
 
 public class FirebaseManager : MonoBehaviour
 {
+    public static FirebaseManager instance;
+
     // Firebase variables
     [Header("Firebase")]
     public DependencyStatus dependencyStatus;
