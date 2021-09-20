@@ -12,12 +12,16 @@ public class AvatarManager : MonoBehaviour
     private GameObject target;
     private Transform targetTrans;
 
+    // dictionary that stores all mesh, like data[head][1], data[eyebrow][3]...
     public Dictionary<string, Dictionary<string, MeshFilter>> data = new Dictionary<string, Dictionary<string, MeshFilter>>();
+    // dictionary that stores all material
     public Dictionary<string, Dictionary<string, Material>> materials = new Dictionary<string, Dictionary<string, Material>>();
-    
+
+    // dictionary that stores one mesh in each part, like meshFilter[head], meshFilter[eyebrow]...
     public Dictionary<string, MeshFilter> meshFilter = new Dictionary<string, MeshFilter>();
     //public Dictionary<string, Material> material = new Dictionary<string, Material>();
     public Dictionary<string, MeshRenderer> meshRenderer = new Dictionary<string, MeshRenderer>();
+    // transform information [x,y,z] of all parts of an avatar
     public Dictionary<string, Transform> transforms = new Dictionary<string, Transform>();
 
     public GameObject currentUserObject;
@@ -31,21 +35,28 @@ public class AvatarManager : MonoBehaviour
 
     void Start()
     {
+        // load models from Source object
         InstantiateSource();
+        // load transfroms from target
         InstantiateTarget();
+        // save the data get from unity in programming variables
         SaveData();
+
         //InitAvatar();
     }
 
     public void InstantiateSource()
     {
+        // find the resources from unity and give the values to source
         source = Instantiate(Resources.Load("resources")) as GameObject;
         sourceTrans = source.transform;
+        // hide the Source object from the screen
         source.SetActive(false);
     }
 
     public void InstantiateTarget()
     {
+        // find the target from unity and give the values to target
         target = Instantiate(Resources.Load("target")) as GameObject;
         targetTrans = target.transform;
     }
@@ -84,12 +95,16 @@ public class AvatarManager : MonoBehaviour
 
     public void SaveData()
     {
+        // if source was not loaded correctly
         if (sourceTrans == null)
         {
             Debug.Log("soure tranform is empty");
             return;
         }
+
+        // stores every mesh(3d model) from sourceTarget, because the source was set inactive
         MeshFilter[] parts = sourceTrans.GetComponentsInChildren<MeshFilter>();
+        // stores every MeshRenderer
         MeshRenderer[] meshRend = sourceTrans.GetComponentsInChildren<MeshRenderer>();
         Transform[] transf = sourceTrans.GetComponentsInChildren<Transform>();
 
